@@ -1,9 +1,5 @@
 <?php
 
-ini_set('display_startup_errors', 1);
-ini_set('display_errors', 1);
-error_reporting(-1);
-
 $success = false;
 $failure = false;
 
@@ -13,22 +9,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$username = $_POST["username"];
 	$password = $_POST["password"];
 
-	$sql = "SELECT * FROM `users` WHERE `username` = '$username' AND `password` = '$password'";
+	$sql = "SELECT * FROM `users` WHERE `username` = '$username'";
+	// $sql = "SELECT * FROM `users` WHERE `username` = '$username' AND `password` = '$password'";
 	$result = mysqli_query($conn, $sql);
 	$num = mysqli_num_rows($result);
-	echo $num;
 
 	if ($num == 1) {
-		$success = true;
-		session_start();
-		$_SESSION['loggedIn'] = true;
-		$_SESSION['username'] = $username;
-		header("location: welcome.php");
+
+		while ($row = mysqli_fetch_assoc($result)) {
+			if (password_verify($password, $row['password'])) {
+				$success = true;
+				session_start();
+				$_SESSION['loggedIn'] = true;
+				$_SESSION['username'] = $username;
+				header("location: welcome.php");
+			}
+		}
+		
 	} else {
 		$failure = true;
 	}
 }
-
 
 ?>
 

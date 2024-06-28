@@ -17,7 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $num = mysqli_num_rows($result);
 
     if (($password == $confirmPass) && ($num == 0)) {
-        $sql = "INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$password');";
+
+        //https://www.php.net/manual/en/function.password-hash.php
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$hash');";
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
@@ -72,12 +75,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ?>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input maxlength="10" type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp">
+                <input maxlength="20" type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp">
 
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input maxlength="20" type="password" class="form-control" id="password" name="password">
+                <input maxlength="25" type="password" class="form-control" id="password" name="password">
                 <div id="emailHelp" class="form-text">8 Characters. Include symbols, upper, lower cases.</div>
             </div>
             <div class="mb-3">
