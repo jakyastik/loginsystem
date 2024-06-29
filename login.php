@@ -23,6 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				$_SESSION['loggedIn'] = true;
 				$_SESSION['username'] = $username;
 				header("location: welcome.php");
+			} else {
+				$failure = true;
 			}
 		}
 		
@@ -53,11 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 		<form class="mt-5" action="/loginsystem/login.php" method="post">
 			<?php
-			if ($success) {
-				echo '<div class="alert alert-success" role="alert">
-                Success! You are logged in. 
-            </div>';
-			}
 
 			if ($failure) {
 				echo '<div class="alert alert-danger" role="alert">
